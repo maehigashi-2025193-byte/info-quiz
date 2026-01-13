@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>情報リテラシー高難度クイズ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #eef2f7;
+      padding: 20px;
+    }
+    .quiz-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: auto;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
 
+<div class="quiz-box">
+  <h2 id="question"></h2>
+  <div id="choices"></div>
+  <p id="result"></p>
+  <p id="explanation"></p>
+  <button onclick="nextQuestion()">次の問題</button>
+</div>
+
+<script>
+const quiz = [
+  {
+    question: "SNSで拡散されやすいフェイクニュースの特徴として、最も適切なものはどれ？",
+    choices: [
+      "一次情報へのリンクが必ず記載されている",
+      "感情を強く刺激する表現が多い",
+      "公的機関の公式文書である",
+      "複数の信頼できる報道機関が同時に報じている"
+    ],
+    answer: 1,
+    explanation: "フェイクニュースは怒りや不安をあおる表現で拡散されやすく、冷静な事実確認をさせない特徴があります。"
+  },
+  {
+    question: "ある情報の信頼性を判断する際、最初に確認すべき点として最も重要なのは？",
+    choices: [
+      "いいねの数",
+      "発信者（誰が書いたか）",
+      "文章の長さ",
+      "画像が付いているかどうか"
+    ],
+    answer: 1,
+    explanation: "情報の信頼性は、内容よりもまず「誰が発信しているか」を確認することが基本です。"
+  },
+  {
+    question: "「この情報はコピペ自由」と書かれていないウェブ記事を引用する際に、正しい対応はどれ？",
+    choices: [
+      "出典を明記すれば一部引用は可能",
+      "教育目的なら無断転載してよい",
+      "URLを貼れば全文コピーしてよい",
+      "改変すれば著作権は発生しない"
+    ],
+    answer: 0,
+    explanation: "著作権法では、出典を明記し、必要最小限であれば引用が認められています。"
+  },
+  {
+    question: "フィッシング詐欺メールの特徴として最も典型的なものは？",
+    choices: [
+      "送信元のドメインが公式と微妙に異なる",
+      "日本語が非常に丁寧で誤字がない",
+      "必ず添付ファイルが付いている",
+      "送信時間が深夜である"
+    ],
+    answer: 0,
+    explanation: "見た目は本物でも、送信元のURLやドメインが微妙に違うのは典型的な詐欺の特徴です。"
+  },
+  {
+    question: "検索結果の上位に表示される情報について、正しい理解はどれ？",
+    choices: [
+      "必ず最も正確な情報である",
+      "広告やSEOの影響を受ける場合がある",
+      "公的機関が内容を保証している",
+      "最新情報のみが表示される"
+    ],
+    answer: 1,
+    explanation: "検索順位は正確さではなく、広告やSEO対策の影響を受けることがあります。"
+  }
+];
+
+let current = 0;
+let score = 0;
+
+function showQuestion() {
+  document.getElementById("result").textContent = "";
+  document.getElementById("explanation").textContent = "";
+
+  document.getElementById("question").textContent =
+    `Q${current + 1}. ${quiz[current].question}`;
+
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
+  quiz[current].choices.forEach((choice, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.onclick = () => checkAnswer(index);
+    choicesDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(selected) {
+  const result = document.getElementById("result");
+  const explanation = document.getElementById("explanation");
+  const correct = quiz[current].answer;
+
+  if (selected === correct) {
+    result.textContent = "⭕ 正解！";
+    score++;
+  } else {
+    result.textContent = `❌ 不正解（正解：${quiz[current].choices[correct]}）`;
+  }
+
+  explanation.textContent = "解説：" + quiz[current].explanation;
+}
+
+function nextQuestion() {
+  current++;
+
+  if (current < quiz.length) {
+    showQuestion();
+  } else {
+    document.getElementById("question").textContent =
+      `クイズ終了！ 正解数：${score} / ${quiz.length}`;
+    document.getElementById("choices").innerHTML = "";
+    document.getElementById("result").textContent = "";
+    document.getElementById("explanation").textContent = "";
+  }
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
